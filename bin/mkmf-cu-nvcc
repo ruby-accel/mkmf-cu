@@ -1,0 +1,21 @@
+#!/usr/bin/env ruby
+require "mkmf-cu/opt"
+
+opt, opt_h = build_optparser()
+
+$stderr.puts 'given command line options: ' + ARGV.join(' ')
+parse_ill_short(ARGV, opt_h)
+parse_ill_short_with_arg(ARGV, opt_h)
+
+argv = opt.parse(ARGV)
+
+if opt_h["-c"].size > 0
+  s = generate_compiling_command_line(opt_h)
+elsif opt_h['-dynamic'].size > 0 or opt_h['-shared'].size > 0
+  s = generate_linking_command_line(argv, opt_h)
+else
+  raise
+end
+
+$stderr.puts "nvcc" + s
+Open3.capture2("/Developer/NVIDIA/CUDA-7.5/bin/nvcc " + s)
