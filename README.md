@@ -25,4 +25,4 @@ For example,
 will execute
 
     nvcc -I. -O2 -o culib.o -c culib.cu --compiler-options -fno-common \
-                                        --compiler-options -stdlib=libc++ --compiler-options  -Wall
+                                        --compiler-options -stdlib=libc++ --compiler-options -Wall
