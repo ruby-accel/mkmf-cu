@@ -20,9 +20,13 @@ it convert them to ones suitable for nvcc and execute nvcc with them.
 
 For example,
 
-    mkmf-cu-nvcc -I. -fno-common -pipe -Os -stdlib=libc++ -O2 -Wall -o culib.o -c culib.cu
+    mkmf-cu-nvcc -I. -fno-common -pipe -Os -O2 -Wall -o culib.o -c culib.cu
 
 will execute
 
-    nvcc -I. -O2 -o culib.o -c culib.cu --compiler-options -fno-common \
-                                        --compiler-options -stdlib=libc++ --compiler-options -Wall
+    nvcc -I. -O2 -o culib.o -c culib.cu --compiler-options -fno-common --compiler-options -Wall
+
+## Notice
+
+When the suffix of the name of a file containing CUDA code is not .cu,
+you must add the option "-x cu" to $CFLAGS or $CXXFLAGS in extconf.rb.
