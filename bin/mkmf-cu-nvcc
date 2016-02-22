@@ -3,7 +3,7 @@ require "mkmf-cu/opt"
 
 opt, opt_h = build_optparser()
 
-$stderr.puts 'given command line options: ' + ARGV.join(' ')
+$stderr.puts '[given command line options]: ' + ARGV.join(' ')
 parse_ill_short(ARGV, opt_h)
 parse_ill_short_with_arg(ARGV, opt_h)
 

@@ -30,7 +30,7 @@ def parse_ill_short(argv, opt_h)
       argv.delete_at(ind)
       argv.delete_at(ind)
     else
-      opt_h[opt] << opt
+      opt_h[opt] << ""
       argv.delete_at(ind)
     end
   end
@@ -55,7 +55,7 @@ end
 
 def compiler_option(opt_h)
   ret = ""
-  ["-f", "-W"].each{|op|
+  ["-f", "-W", "-pipe"].each{|op|
     opt_h[op].each{|e|
       ret << " --compiler-options " + "#{op}#{e}"
     }
