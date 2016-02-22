@@ -12,8 +12,8 @@ require "mkmf-cu"
 
 ## How does it work?
 
-By requiring "mkmf-cu", compiler commands and a linker command defined in mkmf
-will be replaced with mkmf-cu-nvcc, included in this gem.
+By requiring "mkmf-cu", compiler commands defined in mkmf
+will be replaced with mkmf-cu-nvcc, a command included in this gem.
 
 When mkmf-cu-nvcc is called with arguments for gcc or clang,
 it convert them to ones suitable for nvcc and execute nvcc with them.
