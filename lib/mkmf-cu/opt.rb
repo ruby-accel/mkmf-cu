@@ -1,13 +1,9 @@
 require "optparse"
 require "rbconfig"
-require "open3"
-
 
 def build_optparser
-  
   opt = OptionParser.new
   opt_h = Hash.new{|h, k| h[k] = [] }
-
 
   opt.on("--arch arg") {|v| opt_h["-arch"] << v }
   opt.on("--std arg") {|v| opt_h["-std"] << v }
@@ -30,6 +26,7 @@ def build_optparser
   opt.on('-x pat', "--x pat") {|v| opt_h["-x"] << v }
   opt.on('-O num'){|v| opt_h["-O"] << v if /[0-9]/ =~ v }
   opt.on('--mkmf-cu-ext ext'){|v| opt_h["--mkmf-cu-ext"] << v}
+
   return [opt, opt_h]
 end
 
