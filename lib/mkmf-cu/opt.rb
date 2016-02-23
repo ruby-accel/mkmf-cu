@@ -8,6 +8,17 @@ def build_optparser
   opt = OptionParser.new
   opt_h = Hash.new{|h, k| h[k] = [] }
 
+
+  opt.on("--arch arg") {|v| opt_h["-arch"] << v }
+  opt.on("--std arg") {|v| opt_h["-std"] << v }
+  opt.on("--stdlib arg") {|v| opt_h["-stdlib"] << v }
+
+  opt.on("--Wl arg") {|v| opt_h["-Wl"] << v }
+
+  opt.on('--profile') {|v| opt_h["-pg"] << "" }
+  opt.on('-g') {|v| opt_h["-g"] << "" }
+  opt.on('-G', "--device-debug") {|v| opt_h["-G"] << "" }
+
   opt.on('-I path') {|v| opt_h["-I"] << v }
   opt.on('-D flag') {|v| opt_h["-D"] << v }
   opt.on('-W flag') {|v| opt_h["-W"] << v }
@@ -23,33 +34,26 @@ def build_optparser
 end
 
 def parse_ill_short(argv, opt_h)
-  ["-arch", "-shared", "-rdynamic", "-dynamic", "-bundle", "-stdlib", "-pipe"].each{|opt|
-  if ind = argv.find_index(opt)
-    if "-arch" == opt
-      opt_h[opt] << "-arch," + argv[ind+1]
-      argv.delete_at(ind)
-      argv.delete_at(ind)
-    else
+  ["-shared", "-rdynamic", "-dynamic", "-bundle",  "-pipe", "-pg"].each{|opt|
+    if ind = argv.find_index(opt)
       opt_h[opt] << ""
       argv.delete_at(ind)
     end
-  end
+  }
+  ["-arch", "-std", "-stdlib"].each{|opt|
+    if ind = argv.find_index(opt)
+      argv[ind] = "-" + opt
+    end
   }
 end
 
 def parse_ill_short_with_arg(argv, opt_h)  
-  added = []
-  argv.each_with_index{|e, i|
-    if /\A\-stdlib=.*/ =~ e
-      added << e
-      opt_h["-stdlib"] << e
-    elsif /\A\-Wl,(.*)/ =~ e
-      added << e
-      opt_h["-Wl"] << $1
-    end
-  }
-  added.each{|e|
-    argv.delete(e)
+  [/\A(\-stdlib)=(.*)/, /\A(\-Wl),(.*)/].each{|reg|
+    argv.each{|e|
+      if reg =~ e
+        e[0..-1] = "-" + $1 + '=' + $2
+      end
+    }
   }
 end
 
@@ -62,7 +66,7 @@ def compiler_option(opt_h)
   }
   ["-stdlib"].each{|op|
     opt_h[op].each{|e|
-      ret << " --compiler-options " + e
+      ret << " --compiler-options " + "#{op}=#{e}"
     }
   }
   return ret
@@ -85,7 +89,7 @@ end
 
 def generate_compiling_command_line(opt_h)
   s = ""
-  ["-x", "-I", "-D", "-o", "-c", "-O"].each{|op|
+  ["-pg", "-g", "-G", "-x", "-I", "-D", "-o", "-c", "-O"].each{|op|
     opt_h[op].each{|e|
       case op
       when "-o", "-c", "-x"
