@@ -84,8 +84,17 @@ def linker_option(opt_h)
   return ret
 end
 
+def compiler_bin(opt_h)
+  if opt_h["--mkmf-cu-ext"][0] == "c"
+    " --compiler-bindir " + RbConfig::CONFIG["CC"]
+  elsif opt_h["--mkmf-cu-ext"][0] == "cxx"
+    " --compiler-bindir " + RbConfig::CONFIG["CXX"]
+  end
+end
+
 def generate_compiling_command_line(opt_h)
   s = ""
+  # options nvcc can uderstatnd
   ["-pg", "-g", "-G", "-x", "-I", "-D", "-o", "-c", "-O"].each{|op|
     opt_h[op].each{|e|
       case op
@@ -97,13 +106,7 @@ def generate_compiling_command_line(opt_h)
     }
   }
   s << compiler_option(opt_h)
-
-  if opt_h["--mkmf-cu-ext"][0] == "c"
-    s << " --compiler-bindir " + RbConfig::CONFIG["CC"]
-  elsif opt_h["--mkmf-cu-ext"][0] == "cxx"
-    s << " --compiler-bindir " + RbConfig::CONFIG["CXX"]
-  end
-
+  s << compiler_bin(opt_h)
   return s
 end
 
@@ -123,11 +126,7 @@ def generate_linking_command_line(argv, opt_h)
   s << compiler_option(opt_h)
   s << linker_option(opt_h)
 
-  if opt_h["--mkmf-cu-ext"][0] == "c"
-    s << " --compiler-bindir " + RbConfig::CONFIG["CC"]
-  elsif opt_h["--mkmf-cu-ext"][0] == "cxx"
-    s << " --compiler-bindir " + RbConfig::CONFIG["CXX"]
-  end
+  s << compiler_bin(opt_h)
 
   return s
 end

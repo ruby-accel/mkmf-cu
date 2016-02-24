@@ -29,4 +29,10 @@ class TestMkmfCuOpt < Test::Unit::TestCase
                  linker_option(h))
 
   end
+
+  def test_compiler_bin
+    h = Hash.new{|h, k| h[k] = [] }.merge({"-shared"=>[""], "-pipe"=>[""], "--mkmf-cu-ext"=>["c"]})
+    assert_equal(" --compiler-bindir " + RbConfig::CONFIG["CC"],
+                 compiler_bin(h))
+  end
 end
