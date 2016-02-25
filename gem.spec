@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name        = 'mkmf-cu'
-  s.version     = '0.1.1.pre1'
+  s.version     = '0.1.1'
   s.date        = '2016-02-24'
   s.summary     = "Write Ruby extension in C/C++ with NVIDIA CUDA."
   s.description =
