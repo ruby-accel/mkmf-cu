@@ -45,7 +45,7 @@ def parse_ill_short(argv, opt_h)
 end
 
 def parse_ill_short_with_arg(argv, opt_h)  
-  [/\A(\-stdlib)=(.*)/, /\A(\-Wl),(.*)/].each{|reg|
+  [/\A(\-stdlib)=(.*)/, /\A(\-std)=(.*)/, /\A(\-Wl),(.*)/].each{|reg|
     argv.each{|e|
       if reg =~ e
         e[0..-1] = "-" + $1 + '=' + $2
@@ -61,7 +61,7 @@ def compiler_option(opt_h)
       ret << " --compiler-options " + "#{op}#{e}"
     }
   }
-  ["-stdlib"].each{|op|
+  ["-stdlib", "-std"].each{|op|
     opt_h[op].each{|e|
       ret << " --compiler-options " + "#{op}=#{e}"
     }
@@ -76,11 +76,9 @@ def linker_option(opt_h)
       ret << " --linker-options " + op
     }
   }
-
   opt_h["-Wl"].each{|e|
     ret << " --linker-options " + e
   }
-
   return ret
 end
 
@@ -95,10 +93,10 @@ end
 def generate_compiling_command_line(opt_h)
   s = ""
   # options nvcc can uderstatnd
-  ["-pg", "-g", "-G", "-x", "-I", "-D", "-o", "-c", "-O"].each{|op|
+  ["-std", "-pg", "-g", "-G", "-x", "-I", "-D", "-o", "-c", "-O"].each{|op|
     opt_h[op].each{|e|
       case op
-      when "-o", "-c", "-x"
+      when "-o", "-c", "-x", "-std"
         s << " #{op} #{e}"
       else
         s << " #{op}#{e}"
@@ -125,8 +123,6 @@ def generate_linking_command_line(argv, opt_h)
   }
   s << compiler_option(opt_h)
   s << linker_option(opt_h)
-
   s << compiler_bin(opt_h)
-
   return s
 end
