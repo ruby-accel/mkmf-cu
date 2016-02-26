@@ -1,5 +1,6 @@
 require "mkmf"
 
+MKMF_CU = true
 MakeMakefile::CONFIG["CC"]  = "mkmf-cu-nvcc --mkmf-cu-ext=c"
 MakeMakefile::CONFIG["CXX"] = "mkmf-cu-nvcc --mkmf-cu-ext=cxx"
 MakeMakefile::C_EXT << "cu"
