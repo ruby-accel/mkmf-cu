@@ -1,6 +1,6 @@
 # About mkmf-cu
 
-mkmf-cu is a gem to write Ruby extensions in C/C++ with NVIDIA CUDA.
+mkmf-cu is a gem to build Ruby extensions written in C/C++ with NVIDIA CUDA.
 It consists of a simple wrapper command for nvcc and a monkey patch for mkmf.
 
 ## How to use it.
