@@ -59,7 +59,7 @@ class TestMkmfCuOpt < Test::Unit::TestCase
     assert MakeMakefile::C_EXT.include?("cu")
     assert MakeMakefile::SRC_EXT.include?("cu")
 
-    compile_cu_with_cxx_compiler()
+    treat_cu_as_cxx()
     assert !MakeMakefile::C_EXT.include?("cu")
     assert MakeMakefile::CXX_EXT.include?("cu")
   end
