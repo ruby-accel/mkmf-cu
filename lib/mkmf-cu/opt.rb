@@ -70,8 +70,8 @@ def compiler_option(opt_h)
 end
 
 def linker_option(opt_h)
-  ret = ""
-  ["-dynamic", "-bundle", "-shared", "-rdynamic"].each{|op|
+  ret = " -shared "
+  ["-dynamic", "-bundle"].each{|op|
     opt_h[op].each{|e|
       ret << " --linker-options " + op
     }
